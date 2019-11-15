@@ -74,7 +74,11 @@ def main():
 	test = prepare_data(test)
 	test = np.asmatrix(test)
 
-	k_means(data, K)
+
+	data = load_data('dados.txt')
+	data = prepare_data(data)
+
+	k_means(data, 3)
 
 	return 
 
