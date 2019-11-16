@@ -63,7 +63,7 @@ def objective_function(r, X, mu, K):
 			_sum += r[i][k] * np.linalg.norm(diff)
 	return _sum
 
-def get_faixa_etaria(example):
+def get_age(example):
 	# [18-30)
 	if 18 <= example[0] < 30:
 		return 0
@@ -86,16 +86,17 @@ def get_faixa_etaria(example):
 def get_fraction(data, r, K):
 	
 	for k in range(0, K):
-		faixas = [0]*6
+		ages = [0]*6
 		for i in range(0, len(data)):
 			if r[i][k] == 1:
-				f = get_faixa_etaria(data[i])
-				faixas[f] += 1
-		for f in range(0, len(faixas)):
-			if faixas[f] != 0:
-				faixas[f] /= len(data)
+				f = get_age(data[i])
+				ages[f] += 1
+				
+		for f in range(0, len(ages)):
+			if ages[f] != 0:
+				ages[f] /= len(data)
 		print "Cluster ", k
-		print faixas
+		print ages
 		print "\n"
 
 
@@ -129,5 +130,5 @@ def k_means(data, K):
 	print centroids
 
 	print "\n"
-	print "Cluster for 'faixa etaria':"
+	print "Cluster fraction by age:"
 	get_fraction(data, r, K)
