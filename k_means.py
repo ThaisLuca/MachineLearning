@@ -1,6 +1,9 @@
 
+from __future__ import division
 import numpy as np 
 import random
+from sklearn.cluster import KMeans
+
 
 def find_centroid_index(centroids, data):
 	i = 0
@@ -60,24 +63,71 @@ def objective_function(r, X, mu, K):
 			_sum += r[i][k] * np.linalg.norm(diff)
 	return _sum
 
+def get_faixa_etaria(example):
+	# [18-30)
+	if 18 <= example[0] < 30:
+		return 0
+	# [30-50)
+	if 30 <= example[0] < 50:
+		return 1
+	# [50-60)
+	if 50 <= example[0] < 60:
+		return 2
+	# [60-70)
+	if 60 <= example[0] < 70:
+		return 3
+	# [70-80)
+	if 70 <= example[0] < 80:
+		return 4
+	# [80-100)
+	if 80 <= example[0] < 100:
+		return 5
+
+def get_fraction(data, r, K):
+	
+	for k in range(0, K):
+		faixas = [0]*6
+		for i in range(0, len(data)):
+			if r[i][k] == 1:
+				f = get_faixa_etaria(data[i])
+				faixas[f] += 1
+		for f in range(0, len(faixas)):
+			if faixas[f] != 0:
+				faixas[f] /= len(data)
+		print "Cluster ", k
+		print faixas
+		print "\n"
+
+
 def k_means(data, K):
-	n_iterations = 20
+	n_iterations = 50
+	#data = data[:5]
 
 	#Initialize clusters
-	# indexes is used for 1-of-K code scheme
-	data = data[:5]
+	# r is used for 1-of-K code scheme
+	# a point belongs to a cluster if r[i][cluster_number] = 1
+	# mu is the array for storing centroids
 	r, mu = get_cetroids(data, K)
 
 	for n in range(0, n_iterations):
+		last_mu = mu
 		r = optimize_r(data, mu, r, K)
 		mu = optimize_mu(data, mu, r, K)
+
+		#If centroids don't change, break
+		if mu == last_mu: break
 		erro = objective_function(r, data, mu, K)
-		print "Erro ", erro
 
-	# print "Centroids: ", mu
-	# print "Localization for each example: ", r
-	
-	
+	print "Centroids: ", mu
+	print "\n"
+	print "Localization for each example: ", r
 
+	print "\n"
+	print "Python K-Means"
+	kmeans = KMeans(n_clusters=K).fit(data)
+	centroids = kmeans.cluster_centers_
+	print centroids
 
-	
+	print "\n"
+	print "Cluster for 'faixa etaria':"
+	get_fraction(data, r, K)

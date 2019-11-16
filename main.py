@@ -74,11 +74,13 @@ def main():
 	test = prepare_data(test)
 	test = np.asmatrix(test)
 
-
 	data = load_data('dados.txt')
 	data = prepare_data(data)
 
-	k_means(data, 3)
+
+	
+
+	k_means(data, 4)
 
 	return 
 
@@ -164,7 +166,8 @@ def main():
 
 	print mse_f3, mse_f4	
 
-	# Comparando os modelos segundo os dados de teste
+	# K-Means
+	k_means(data, 4)
 
 main()
 	
