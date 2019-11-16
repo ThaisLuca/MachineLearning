@@ -166,8 +166,13 @@ def main():
 
 	print mse_f3, mse_f4	
 
-	# K-Means
-	k_means(data, 4)
+	# K-Means for 3 clusters
+	K = 3
+	k_means(data, K)
+
+	#K-Means for 4 clusters
+	K = 4
+	k_means(data, K)
 
 main()
 	
