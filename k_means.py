@@ -91,11 +91,12 @@ def get_fraction(data, r, K):
 			if r[i][k] == 1:
 				f = get_age(data[i])
 				ages[f] += 1
-				
+
+		print "Cluster ", k	
+		print ages
 		for f in range(0, len(ages)):
 			if ages[f] != 0:
 				ages[f] /= len(data)
-		print "Cluster ", k
 		print ages
 		print "\n"
 

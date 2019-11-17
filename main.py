@@ -2,7 +2,6 @@ import random
 import numpy as np
 from linear_regression import *
 from gaussian import *
-from scipy.stats import multivariate_normal
 from sklearn.metrics import mean_squared_error
 from k_means import *
 import os.path
@@ -164,7 +163,7 @@ def main():
 	#Predicting VO2 Max
 	A = np.array([[58.2, 302],[70.7, 530],[82, 208]])
 	print "Predicted values for 2 feature Gaussiana: "
-	y_A = multivariate_normal.pdf(A, mi3, sigma3)
+	y_A = multivariate_gaussian(A, mi3, sigma3)
 	print y_A
 
 	print "Predicted values using American College os Sports Equation:"
@@ -229,6 +228,14 @@ def main():
 	print "Accuracy:"
 	print len(y_true), len(y_pred)
 	print accuracy_score(y_true, y_pred)
+
+	#Mixture of Gaussians
+	#y_true = get_correct_classification(test)
+	y_true = get_array(test, 3)
+	y_pred = mixture_gaussians(train, test, 3)
+
+	print "Mean Squared Error"
+	print mean_squared_error(y_true, y_pred)
 
 main()
 	
