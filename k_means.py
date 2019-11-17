@@ -8,7 +8,7 @@ from sklearn.cluster import KMeans
 def find_centroid_index(centroids, data):
 	i = 0
 	for c in centroids:
-		if c == data:
+		if (c==data).all():
 			return i
 		else:
 			i += 1
@@ -102,7 +102,8 @@ def get_fraction(data, r, K):
 
 def k_means(data, K):
 	n_iterations = 50
-	#data = data[:5]
+	data = np.array(data)
+	data = np.delete(data, 1, 1)
 
 	#Initialize clusters
 	# r is used for 1-of-K code scheme
