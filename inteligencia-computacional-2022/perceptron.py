@@ -221,6 +221,77 @@ class Perceptron:
             
         return n_iteractions
 
+    def train_pocket(self,X,y,k):
+        '''
+            Perceptron Learning Algorithm (Pocket)
+
+            Começando com g passada como parâmetro, 
+            a reta é atualizada de acordo com os exemplos que 
+            não foram classificados corretamente.
+            
+            A cada iteração, o algoritmo verifica se a nova
+            função g é melhor do que anterior, i.e, se esta
+            gera um número menor de pontos classificados 
+            incorretamente.
+            
+            O algoritmo termina quando não há mais pontos classificados 
+            incorretamente ou após k iterações.
+            
+            Args:
+                X: pontos (x,y) do conjunto de treinamento
+                y: rótulos dos pontos passados como parâmetro
+                k: número de iterações
+            Return:
+                a melhor hipótese encontrada durante as k iterações,
+                i.e., a hipótese que mais classificou exemplos
+                corretamente
+        '''
+
+        # Guarda quantos pontos foram classificados
+        # de forma incorreta na última atualização
+        # dos pesos de g
+        
+        # No pior caso, nenhum ponto é classificado corretamente
+        previous_n_miss_classified = len(X)
+        
+        # No pior caso, a melhor reta é a de início da execução do PLA
+        best_g = np.zeros(3)
+        
+        for i in range(k):
+
+            # Inicializo os arrays de predição 
+            # e exemplos que não foram classificados corretamente
+            X_miss_classified, y_miss_classified, predicted = [], [], []
+
+            # Predição dos exemplos pela função hipótese
+            predicted = self.predict(X,self.g)
+        
+            # Coleto todos os pontos que não foram classificados corretamente
+            X_miss_classified,y_miss_classified = self.__get_miss_classified_examples(X,predicted,y)
+
+            # Desenho os pontos e as funções na tela (opcional)
+            if self.show_plot:
+                plot(X,y,self.g)
+                print(f'Número de pontos classificados de forma errada: {len(X_miss_classified)}')
+                print(f'Melhor hipótese: {best_g}')
+
+            # Se todos os pontos foram classificados corretamente, 
+            # encerra o programa
+            if len(X_miss_classified) == 0:
+                break
+            
+            # Verifico se não é a primeira iteração e se
+            # a nova g é melhor do que a anterior
+            if i > 0 and len(X_miss_classified) < previous_n_miss_classified:
+                best_g = self.g[:]
+                previous_n_miss_classified = len(X_miss_classified)
+
+            # Uso os pontos que não foram classificados corretamente 
+            # para ajustar os pesos de g
+            self.g = self.__update_weights(X_miss_classified,y_miss_classified)
+            
+        return best_g
+
 
 def main():
 
